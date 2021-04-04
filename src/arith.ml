@@ -18,9 +18,31 @@ type tree =
   |Binary of operator * tree * tree
 ;;
 
-let rec parse (tokens : token list) : tree =
-  match tl with
-  |End -> continuer
-  |
+
+
+let aux_transf_in_tree( pile , ope : token list * operator): tree =
+  match pile with
+  |var1::var2::tl_pile -> transf_in_tree ((tail, maketree(var1, vare2, ope)::tl_pile)
+;;
+  
+
+let rec transf_in_tree ( tokens, pile : token list * tree list) : tree =
+  match tokens with
+  |[] -> List.hd (pile)
+  |head::tail -> sous_transf_in_tree(head, pile);
+
 ;;
 
+
+let sous_transf_in_tree( token, pile : token * tree list) : tree =
+  match token  with 
+  |Var -> transf_in_tree(tail, var::pile);                 
+  |Plus-> aux_transf_in_tree(pile , Plus);
+  |Minus-> aux_transf_in_tree(pile , Minus); 
+  |Mult -> aux_transf_in_tree(pile , Mult);  
+  |Div  -> aux_transf_in_tree(pile , Div);
+;;
+                     
+                            
+  
+    
