@@ -44,5 +44,13 @@ let sous_transf_in_tree( token, pile : token * tree list) : tree =
 ;;
                      
                             
-  
-    
+let rec parcours_infixe f1 f2 = function
+| Feuille x -> f1 x
+| Noeud(x,g,d) -> parcours_infixe f1 f2 g ;
+f2 x ;
+parcours_infixe f1 f2 d;;
+
+let affichage_non_simplifier (pile : tree list) =
+  match pile with
+  |head::tail -> parcours_infixe head pile;
+;;
