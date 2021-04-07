@@ -18,30 +18,41 @@ type tree =
   |Binary of operator * tree * tree
 ;;
 
-
-
-let aux_transf_in_tree( pile , ope : token list * operator): tree =
+let aux_transf_in_Untree(pile : tree list): tree list=
   match pile with
-  |var1::var2::tl_pile -> transf_in_tree ((tail, maketree(var1, vare2, ope)::tl_pile)
+  |var1::tl_pile -> (Unary(var1)::tl_pile)
 ;;
-  
+
+
+let aux_transf_in_Betree( pile , ope : tree list * operator): tree list =
+  match pile with
+  |var1::var2::tl_pile ->( Binary(ope, var1, var2))::tl_pile
+  |[] -> failwith "error"
+;;
+
+let token_transf_in_tree( token, pile : token * tree list) : tree list =
+  match token  with 
+  |Variable(var) -> Var(var)::pile
+  |Number(var) -> Cst(var)::pile
+  |Add-> aux_transf_in_Betree(pile , Plus)
+  |Subtract -> aux_transf_in_Betree(pile, Minus);
+  |Minus-> aux_transf_in_Untree(pile) 
+  |Multiply-> aux_transf_in_Betree(pile , Mult)  
+  |Divide  -> aux_transf_in_Betree(pile , Div)
+  |End -> []
+;;
 
 let rec transf_in_tree ( tokens, pile : token list * tree list) : tree =
   match tokens with
   |[] -> List.hd (pile)
-  |head::tail -> sous_transf_in_tree(head, pile);
+  |head::tail -> transf_in_tree(tail, token_transf_in_tree(head, pile)) 
 
 ;;
 
+transf_in_tree(string_to_token_list("34 56 2+ x * -"), []);;
 
-let sous_transf_in_tree( token, pile : token * tree list) : tree =
-  match token  with 
-  |Var -> transf_in_tree(tail, var::pile);                 
-  |Plus-> aux_transf_in_tree(pile , Plus);
-  |Minus-> aux_transf_in_tree(pile , Minus); 
-  |Mult -> aux_transf_in_tree(pile , Mult);  
-  |Div  -> aux_transf_in_tree(pile , Div);
-;;
+
+
                      
                             
 let rec parcours_infixe f1 f2 = function
