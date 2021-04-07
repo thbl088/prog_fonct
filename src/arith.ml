@@ -4,6 +4,7 @@ open Expression_scanner;;
 
 string_to_token_list "34 56 2+ x * -;";;
 string_to_token_list "x 3 + 5 7 + + 3 4 * 1 3 + / /;";;
+
 type operator =
   |Plus
   |Minus
@@ -21,13 +22,14 @@ type tree =
 let aux_transf_in_Untree(pile : tree list): tree list=
   match pile with
   |var1::tl_pile -> (Unary(var1)::tl_pile)
+  |[] -> failwith "manque un chiffre ou une constante"
 ;;
 
 
 let aux_transf_in_Betree( pile , ope : tree list * operator): tree list =
   match pile with
   |var1::var2::tl_pile ->( Binary(ope, var1, var2))::tl_pile
-  |[] -> failwith "error"
+  |[] -> failwith "manque un chiffre ou une constante"
 ;;
 
 let token_transf_in_tree( token, pile : token * tree list) : tree list =
@@ -49,7 +51,7 @@ let rec transf_in_tree ( tokens, pile : token list * tree list) : tree =
 
 ;;
 
-transf_in_tree(string_to_token_list("34 56 2+ x * -"), []);;
+transf_in_tree(string_to_token_list("1 ~ 2 +"), []);;
 
 
 
