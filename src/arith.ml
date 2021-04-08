@@ -51,17 +51,44 @@ let rec transf_in_tree ( tokens, pile : token list * tree list) : tree =
 
 ;;
 
-transf_in_tree(string_to_token_list("1 ~ 2 +"), []);;
+let tree_test : tree = transf_in_tree(string_to_token_list("1 ~ 2 +"), []);;
+let tree_test : tree = transf_in_tree(string_to_token_list ("x 3 + 5 7 + + 3 4 * 1 3 + / /"), []);;
+tree_test;;
+
+
+let aux_parcours_infixe (operator, tree : operator * tree list) =
+  match operator with
+  |Plus -> '(' + parcours_infixe tree + ')'
+  |Minus-> '(' + parcours_infixe tree + ')'
+  |Mult -> '(' + parcours_infixe tree + ')'
+  |Div  -> '(' + parcours_infixe tree + ')'
+;;
+
+
+let rec parcours_infixe (tree : tree list) =
+  match tree with
+    | Var(f)        -> head
+    | Cst(f)        -> head
+    | Unary(t)      -> '(' + '-' + (parcours_infixe t) + ')'
+    | Binary(n,l,r) -> (aux_parcours_infixe n l) @ [N n] @ (aux_parcours_infixe n r)
+;;
+
+let rec parcours_infixe = function
+  | Var(f)        -> Printf.sprintf "%d" f
+  | Cst(f)        -> Printf.sprintf "%d" f
+  | Unary(t)      -> '(' + '-' + (parcours_infixe t) + ')'
+  | Binary(n,l,r) -> (aux_parcours_infixe n l) @ [N n] @ (aux_parcours_infixe n r)
+;;
 
 
 
-                     
-                            
 let rec parcours_infixe f1 f2 = function
 | Feuille x -> f1 x
 | Noeud(x,g,d) -> parcours_infixe f1 f2 g ;
-f2 x ;
+                  f2 x ;
 parcours_infixe f1 f2 d;;
+
+
 
 let affichage_non_simplifier (pile : tree list) =
   match pile with
