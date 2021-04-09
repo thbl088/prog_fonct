@@ -73,8 +73,6 @@ let rec simpl_tree(tree : tree) : tree =
   |Cst(_) -> tree
 ;;
 
-
-
 let rec affich_simp (tree: tree) : string =
   let rec remove_par(tree : tree) : string =
     match tree with
