@@ -73,19 +73,9 @@ let rec simpl_tree(tree : tree) : tree =
   |Cst(_) -> tree
 ;;
 
+
+
 let rec affich_simp (tree: tree) : string =
-  let rec remove_par(tree : tree) : string =
-    match tree with
-    | Binary(Plus,Binary(o1,l1,r1),n) -> "(" ^ affich_simp(Binary(o1,l1,r1)) ^ "+" ^ affich_simp(n) ^ ")"
-    | Binary(Plus,n,Binary(o1,l1,r1)) -> "(" ^ affich_simp(n) ^ "+" ^ affich_simp(Binary(o1,l1,r1)) ^ ")"
-    | Binary(Minus,Binary(o1,l1,r1),n) -> "(" ^ affich_simp(Binary(o1,l1,r1)) ^ "-" ^ affich_simp(n) ^ ")"
-    | Binary(Minus,n,Binary(o1,l1,r1)) -> "(" ^ affich_simp(n) ^ "-" ^ affich_simp(Binary(o1,l1,r1)) ^ ")"
-    | Binary(Plus,l,r) -> affich_simp(l) ^ "+" ^ affich_simp(r)
-    | Binary(Minus,l,r)-> affich_simp(l) ^ "-" ^ affich_simp(r)
-    | Binary(Mult,l,r) -> affich_simp(l) ^ "*" ^ affich_simp(r)
-    | Binary(Div,l,r)  -> affich_simp(l) ^ "/" ^ affich_simp(r)
-    | _ -> ""
-  in
   match tree with
   |Var(f)       -> Char.escaped f
   |Cst(f)       -> Int.to_string f
