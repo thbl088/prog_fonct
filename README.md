@@ -18,7 +18,7 @@ s'occupant de transformer le token avant tous filtré par un match with, en arbr
 
 let rec print_tree (tree: tree) : string =
 
-Une fonction récurrente, lis l'abre par parcours infixe et renvoie l'expression mathématique pas simplifié.
+Une fonction récurrente, lis l'abre avec le prrincipe du parcours infixe et renvoie l'expression mathématique non simplifié. Cela se base sur une recursivité qui fait que l'on affiche les variables et les constantes. Pour les arbres binaires nous faisont un appel recursif sur le sous arbre gauche puis le droit en affichant le signe correspondant à l'opérateur entre les deux et des parenthéses en dehors, de cette façon on réalise un parcours infixe. 
 
 let rec transf_in_tree ( tokens, pile : token list * tree list) : tree =
 
@@ -29,7 +29,7 @@ A la fin la fonction renvoie un arbre simplifié.
 
 let rec affich_simp (tree: tree) : string =
 
-Même fonctionnement que la fonction print_tree sauf qu'on simplifie en enlevant des paranthèse inutile.
+Même fonctionnement que la fonction print_tree sauf qu'on simplifie en enlevant des paranthèse inutile. Nous retirons les parenthéses quand un arbres d'opérateur Plus ou Moins à un sous-arbre qui est un arbre binaire.
 
 
 Let main l =
