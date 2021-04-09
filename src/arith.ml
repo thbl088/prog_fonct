@@ -98,6 +98,6 @@ parcours_infixe(tree_test);;
 
 
 (*let tree_test : tree = transf_in_tree(string_to_token_list("1 0 *"), []);; *)
-tree_test;;
+tree_test;
   
 affich_simp(tree_test);

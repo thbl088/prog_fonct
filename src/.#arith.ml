@@ -1,1 +1,0 @@
-vodquik@vodquik-OMEN-by-HP-Laptop.3644:1617974647
