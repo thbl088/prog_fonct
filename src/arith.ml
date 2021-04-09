@@ -28,7 +28,7 @@ let aux_transf_in_Untree(pile : tree list): tree list=
 
 let aux_transf_in_Betree( pile , ope : tree list * operator): tree list =
   match pile with
-  |var1::var2::tl_pile ->( Binary(ope, var1, var2))::tl_pile
+  |var1::var2::tl_pile ->( Binary(ope, var2, var1))::tl_pile
   |[] -> failwith "manque un chiffre ou une constante"
 ;;
 
