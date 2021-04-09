@@ -68,19 +68,19 @@ let rec parcours_infixe (tree: tree) : string =
      |Div  -> "(" ^ parcours_infixe (l) ^ "/" ^ parcours_infixe (r) ^ ")"
 ;;
 
-let parcours_postfixe(tree : tree) : tree =
+let rec parcours_postfixe(tree : tree) : tree =
   match tree with
-  |Binary(Plus,Cst(l), Cst(r)) -> Cst(r+l)
-  |Binary(Minus,Cst(l), Cst(r)) -> Cst(l-r)
-  |Binary(Div,Cst(l), Cst(r)) -> Cst(l/r)
-  |Binary(Mult, Cst(l), Cst(r)) -> Cst(l*r)
-  |Binary(_,_,_) -> tree
+  |Binary(Plus,Cst(var1), Cst(var2)) -> Cst(var1+var2)
+  |Binary(Minus,Cst(var1), Cst(var2)) -> Cst(var1-var2)
+  |Binary(Div,Cst(var1), Cst(var2)) -> Cst(var1/var2)
+  |Binary(Mult, Cst(var1), Cst(var2)) -> Cst(var1*var2)
+  |Binary(o,l,r) -> Binary(o, parcours_postfixe(l), parcours_postfixe(r))
   |Unary(_) -> tree
   |Var(_) -> tree
   |Cst(_) -> tree
 ;;
 
-affich_simp(parcours_postfixe(l))
+
 
 let rec affich_simp (tree: tree) : string =
   match tree with
@@ -94,10 +94,11 @@ let rec affich_simp (tree: tree) : string =
      |Mult -> "(" ^ affich_simp(parcours_postfixe(l)) ^ "*" ^ affich_simp(parcours_postfixe(r)) ^ ")"
      |Div  -> "(" ^ affich_simp(parcours_postfixe(l)) ^ "/" ^ affich_simp(parcours_postfixe(r)) ^ ")"
 ;;
+parcours_postfixe(tree_test);;
 parcours_infixe(tree_test);;
 
 
 (*let tree_test : tree = transf_in_tree(string_to_token_list("1 0 *"), []);; *)
-tree_test;
+
   
 affich_simp(tree_test);
