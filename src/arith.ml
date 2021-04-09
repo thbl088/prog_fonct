@@ -74,31 +74,34 @@ let rec parcours_postfixe(tree : tree) : tree =
   |Binary(Minus,Cst(var1), Cst(var2)) -> Cst(var1-var2)
   |Binary(Div,Cst(var1), Cst(var2)) -> Cst(var1/var2)
   |Binary(Mult, Cst(var1), Cst(var2)) -> Cst(var1*var2)
-  |Binary(o,l,r) -> Binary(o, parcours_postfixe(l), parcours_postfixe(r))
+  |Binary(o,Cst(var1),r) -> Binary(o, parcours_postfixe(Cst(var1)), parcours_postfixe(r))
+  |Binary(o,l,Cst(var2)) -> Binary(o, parcours_postfixe(l), parcours_postfixe(Cst(var2)))
+  |Binary(o,l,r) -> parcours_postfixe(Binary(o, parcours_postfixe(l), parcours_postfixe(r)))
   |Unary(_) -> tree
   |Var(_) -> tree
   |Cst(_) -> tree
 ;;
 
-
-
 let rec affich_simp (tree: tree) : string =
+  let rec remove_par(tree : tree) : string =
+    match tree with
+    | Binary(Plus,Binary(o1,l1,r1),n) -> "(" ^ affich_simp(Binary(o1,l1,r1)) ^ "+" ^ affich_simp(n) ^ ")"
+    | Binary(Plus,n,Binary(o1,l1,r1)) -> "(" ^ affich_simp(n) ^ "+" ^ affich_simp(Binary(o1,l1,r1)) ^ ")"
+    | Binary(Minus,Binary(o1,l1,r1),n) -> "(" ^ affich_simp(Binary(o1,l1,r1)) ^ "-" ^ affich_simp(n) ^ ")"
+    | Binary(Minus,n,Binary(o1,l1,r1)) -> "(" ^ affich_simp(n) ^ "-" ^ affich_simp(Binary(o1,l1,r1)) ^ ")"
+    | Binary(Plus,l,r) -> affich_simp(l) ^ "+" ^ affich_simp(r)
+    | Binary(Minus,l,r)-> affich_simp(l) ^ "-" ^ affich_simp(r)
+    | Binary(Mult,l,r) -> affich_simp(l) ^ "*" ^ affich_simp(r)
+    | Binary(Div,l,r)  -> affich_simp(l) ^ "/" ^ affich_simp(r)
+    | _ -> ""
+  in
   match tree with
   |Var(f)       -> Char.escaped f
   |Cst(f)       -> Int.to_string f
   |Unary(t)     -> "(-" ^ (parcours_infixe t) ^ ")"
-  |Binary(n,l,r)->
-     match n with
-     |Plus -> "(" ^ affich_simp(parcours_postfixe(l)) ^ "+" ^ affich_simp(parcours_postfixe(r)) ^ ")"
-     |Minus-> "(" ^ affich_simp(parcours_postfixe(l)) ^ "-" ^ affich_simp(parcours_postfixe(r)) ^ ")"
-     |Mult -> "(" ^ affich_simp(parcours_postfixe(l)) ^ "*" ^ affich_simp(parcours_postfixe(r)) ^ ")"
-     |Div  -> "(" ^ affich_simp(parcours_postfixe(l)) ^ "/" ^ affich_simp(parcours_postfixe(r)) ^ ")"
+  |Binary(n,l,r)-> remove_par(tree)
 ;;
-parcours_postfixe(tree_test);;
-parcours_infixe(tree_test);;
 
-
-(*let tree_test : tree = transf_in_tree(string_to_token_list("1 0 *"), []);; *)
-
-  
-affich_simp(tree_test);
+tree_test;;
+parcours_infixe(tree_test);;  
+affich_simp(parcours_postfixe(tree_test));;
